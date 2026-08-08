@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>TikTok 授权｜德瑞斯投放平台</title>
+  <style>
+    :root{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:#d9e7f7;background:#071225}
+    *{box-sizing:border-box}body{min-height:100vh;margin:0;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 70% 10%,#0e3152,transparent 35%),#071225}
+    main{width:min(480px,100%);padding:34px;border:1px solid #315273;border-radius:20px;background:#0d1c31;box-shadow:0 20px 70px #0005}
+    span{color:#50e7dd;font-size:12px;font-weight:800;letter-spacing:1.8px}h1{margin:14px 0 10px;color:#fff;font-size:26px}p{margin:0;color:#9fb3c8;line-height:1.8}
+    a{display:inline-block;margin-top:22px;padding:11px 16px;border-radius:9px;background:#50e7dd;color:#06172a;font-weight:800;text-decoration:none}
+  </style>
+</head>
+<body>
+  <main>
+    <span>TIKTOK AUTHORIZATION</span>
+    <h1 id="title">正在返回德瑞斯投放平台</h1>
+    <p id="message">请保持桌面软件正在运行，授权结果会在本机安全处理。</p>
+    <a id="open-app" href="http://127.0.0.1:5174/">打开德瑞斯投放平台</a>
+  </main>
+  <script>
+    (() => {
+      const params = new URLSearchParams(location.search);
+      const state = params.get('state') || '';
+      const validState = /^[a-f0-9]{48}$/i.test(state);
+      const hasResult = params.has('code') || params.has('error');
+      const title = document.getElementById('title');
+      const message = document.getElementById('message');
+      const link = document.getElementById('open-app');
+      if (!validState || !hasResult) {
+        title.textContent = '授权信息无效';
+        message.textContent = '请从德瑞斯投放平台的账号连接页面重新开始 TikTok 授权。';
+        return;
+      }
+      const target = new URL('http://127.0.0.1:5174/api/oauth/tiktok/callback');
+      params.forEach((value, key) => target.searchParams.set(key, value));
+      link.href = target.toString();
+      setTimeout(() => location.replace(target.toString()), 500);
+    })();
+  </script>
+</body>
+</html>
